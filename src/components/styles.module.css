@@ -1,0 +1,40 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 1lh;
+  @media (width < 494px) {
+    flex-direction: column;
+  }
+}
+.cardImg {
+  object-fit: scale-down;
+  width: 100px;
+  height: 100px;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1lh;
+
+  flex: 1;
+
+  position: relative;
+  & p {
+    padding: 0;
+    margin: 0;
+    word-break: break-word;
+  }
+}
+
+.cardAmount {
+  padding-top: 0.77ch;
+}
+.cardDelete {
+  position: absolute !important;
+  right: 0;
+  bottom: 0;
+  height: min-content !important;
+  width: min-content !important;
+}

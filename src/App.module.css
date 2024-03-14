@@ -1,0 +1,37 @@
+.wrapper {
+  max-width: 1920px;
+  min-width: 350px;
+  margin: 0 auto;
+  gap: var(--vkui--size_base_padding_vertical--regular);
+
+  @media (width < 645px) {
+    flex-direction: column;
+    & > .col1,
+    & > .col2 {
+      width: 100%;
+    }
+    /* & > .col2 {
+      position: sticky;
+      bottom: 0;
+    } */
+  }
+  @media (width >= 645px) {
+    & > .col1 {
+      width: 70%;
+    }
+    & > .col2 {
+      width: 30%;
+      position: sticky;
+      top: 33%;
+    }
+  }
+}
+
+.total {
+  background: var(--vkui--color_background_content);
+  border-radius: var(--vkui--size_border_radius_paper--regular);
+}
+
+.message {
+  white-space: pre-wrap;
+}
