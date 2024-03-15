@@ -22,7 +22,7 @@
     & > .col2 {
       width: 30%;
       position: sticky;
-      top: 33%;
+      top: var(--vkui--size_base_padding_vertical--regular);
     }
   }
 }
