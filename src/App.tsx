@@ -1,7 +1,8 @@
 import styles from "./App.module.css";
 import { useState, useEffect } from "react";
 import { getProducts } from "./api/ProductsAPI";
-import { Product, ProductError } from "./shared/types";
+
+import { ProductError, ExtendedProduct } from "./shared/types";
 import {
   AppRoot,
   SplitCol,
@@ -13,17 +14,33 @@ import {
   Card,
 } from "@vkontakte/vkui";
 import ProductCard from "./components/ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import { populateCart } from "./store/ProductCart/slice";
+import { useFormatCurrency } from "./hooks/useFormatCurrency";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const dispatch = useDispatch();
+
+  const total = useSelector((state: RootState) => state.ProductCart.total);
+  const formattedTotal = useFormatCurrency(total).replace("₽", "руб.");
+  const products = useSelector(
+    (state: RootState) => state.ProductCart.products
+  );
+
   const [error, setError] = useState<ProductError>({
     isError: false,
     errorMessage: "",
   });
+
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await getProducts();
-      setProducts(data);
+      const extendData: ExtendedProduct[] = data.map((item) => ({
+        ...item,
+        amount: 1,
+      }));
+      dispatch(populateCart(extendData));
       setError(error);
     };
     fetchData();
@@ -44,12 +61,13 @@ function App() {
                 >{`Что-то пошло не так! D: \n ${error.errorMessage}`}</Div>
               ) : (
                 <CardGrid size="l">
-                  {products.map((product: Product) => (
+                  {products.map((product: ExtendedProduct) => (
                     <ProductCard
                       key={product.id}
                       id={product.id}
                       title={product.title}
                       price={product.price}
+                      amount={product.amount}
                       description={product.description}
                       image={product.image}
                     />
@@ -67,7 +85,7 @@ function App() {
               <Div>
                 <Card mode="outline">
                   <Div>
-                    <b>Итого:</b> {69} руб.
+                    <b>Итого:</b> {formattedTotal}
                   </Div>
                 </Card>
               </Div>

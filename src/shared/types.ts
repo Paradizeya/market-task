@@ -7,9 +7,20 @@ export interface Product {
   image: string;
 }
 
-export type PublicProduct = Omit<Product, "category">;
-
 export interface ProductError {
   isError: boolean;
   errorMessage: string;
+}
+
+type PublicProduct = Omit<Product, "category">;
+
+//Store
+
+export type ExtendedProduct = PublicProduct & {
+  amount: number;
+};
+
+export interface ProductCart {
+  products: ExtendedProduct[];
+  total: number;
 }
