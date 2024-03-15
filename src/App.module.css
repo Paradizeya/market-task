@@ -10,10 +10,6 @@
     & > .col2 {
       width: 100%;
     }
-    /* & > .col2 {
-      position: sticky;
-      bottom: 0;
-    } */
   }
   @media (width >= 645px) {
     & > .col1 {
