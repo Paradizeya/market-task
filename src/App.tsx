@@ -1,8 +1,7 @@
 import styles from "./App.module.css";
-import { useState, useEffect } from "react";
-import { getProducts } from "./api/ProductsAPI";
+import { useEffect } from "react";
 
-import { ProductError, ExtendedProduct } from "./shared/types";
+import { ExtendedProduct } from "./shared/types";
 import {
   AppRoot,
   SplitCol,
@@ -15,35 +14,22 @@ import {
 } from "@vkontakte/vkui";
 import ProductCard from "./components/ProductCard";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
-import { populateCart } from "./store/ProductCart/slice";
+import { AppDispatch, RootState } from "./store/store";
+import { populateCartAsync } from "./store/ProductCart/slice";
 import { useFormatCurrency } from "./hooks/useFormatCurrency";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const total = useSelector((state: RootState) => state.ProductCart.total);
   const formattedTotal = useFormatCurrency(total).replace("₽", "руб.");
   const products = useSelector(
     (state: RootState) => state.ProductCart.products
   );
-
-  const [error, setError] = useState<ProductError>({
-    isError: false,
-    errorMessage: "",
-  });
+  const error = useSelector((state: RootState) => state.ProductCart.error);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await getProducts();
-      const extendData: ExtendedProduct[] = data.map((item) => ({
-        ...item,
-        amount: 1,
-      }));
-      dispatch(populateCart(extendData));
-      setError(error);
-    };
-    fetchData();
+    dispatch(populateCartAsync());
   }, []);
 
   return (
